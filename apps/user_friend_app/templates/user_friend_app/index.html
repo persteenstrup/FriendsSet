@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"> {% load static %} {% load index %} 
+    <!-- The line above tells Django to be ready to listen for static files -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'user_friend_app/css/style.css' %}" media="screen" title="no title" charset="utf-8">
+    <!-- Put the static files in the static folder inside your app.  Django collects files within all static folders and puts them within a single folder -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="{% static 'scripts/scripts.js' %}"></script>
+    <title>user_friend_app</title>
+</head>
+
+<body>
+    <div>
+        <form action="/makefriend" method="POST">
+            {% csrf_token %}
+            <h1>Friends</h1>
+            <label for="friend_1">Person 1</label>
+            <select name="friend_1" id="friend_1">
+                {% for friend in friends%}
+                <option value={{friend.id}}>{{friend.name}}</option>
+                {% endfor %}
+            </select>
+
+            <label for="friend_2">Person 2</label>
+            <select name="friend_2" id="friend_2">
+                {% for friend in friends%}
+                <option value={{friend.id}}>{{friend.name}}</option>
+                {% endfor %}
+            </select>
+            <input type='submit' value='Create Friendship'>
+        </form>
+    </div>
+
+    <div>
+        <form action="/add" method="POST">
+            {% csrf_token %}
+            <label for="name">First Name</label>
+            <input type="text" name='name' id="name">
+            <input type='submit' value='Add Person'>
+        </form>
+    </div>
+
+    <div>
+        <form action="/currentfriend" method="POST">
+            {% csrf_token %}
+            <label for="friend">Find my friends!</label>
+            <select name="friend" id="friend">
+                {% for friend in friends%}
+                <option value={{friend.id}}>{{friend.name}}</option>
+                {% endfor %}
+            </select>
+            <input type='submit' value='Show Friendships'>
+        </form>
+        <h2> current user: {{request.session.friend}}</h2>
+        <div class='friends'>
+            <h2>Friends</h2>
+            <ul>
+                {% for friend in friends_list %}
+                <li>{{friend.name}}</li>
+                {% endfor %}
+            </ul>
+
+        </div>
+        
+        <div class='friends'>
+            <h2>Enemies</h2>                
+            <ul>
+                {% for enemy in enemies_list %}
+                    <li>{{enemy.name}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+
+
+</body>
+
+</html>
